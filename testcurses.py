@@ -15,17 +15,23 @@ class ContactList:
 		self.win.border()
 		self.win.refresh()
 		self.selection=0
+		self.listShift=0;
 	def loadList(self,listJson):
 		"""loads the contact list from listJson"""
 		self.contactList=filter(contactValid,json.loads(listJson))
 		self.redrawList()
+	def width(self):
+		"""return the width of the window (excluding border)"""
+		return self.win.getmaxyx()[1]-2
+	def height(self):
+		"""return the height of the window (excluding border)"""
+		return self.win.getmaxyx()[0]-2
 	def redrawList(self):
 		"""(re)draws the contact list"""
-		for i,contact in enumerate(self.contactList):
-			nameLength=self.win.getmaxyx()[1]-2
-			displayName=(contact['first_name']+' '+contact['last_name'])[:nameLength].ljust(nameLength)
+		for i,contact in enumerate(self.contactList[self.listShift:self.listShift+self.height()]):
+			displayName=(contact['first_name']+' '+contact['last_name'])[:self.width()].ljust(self.width())
 			
-			if(i==self.selection):
+			if(i==self.selection-self.listShift):
 				self.win.addstr(i+1,1,displayName,curses.A_REVERSE)
 			else:
 				self.win.addstr(i+1,1,displayName)
@@ -33,14 +39,22 @@ class ContactList:
 	def nextContact(self):
 		"""selects the next contact in the list"""
 		self.selection+=1
+		# don't allow selections outside the list
 		if(self.selection>=len(self.contactList)):
 			self.selection=len(self.contactList)-1
+		# adjust list shift
+		if(self.selection-self.listShift>=self.height()):
+			self.listShift=self.selection-self.height()+1
 		self.redrawList()
 	def prevContact(self):
 		"""selects the previous contact in the list"""
 		self.selection-=1
+		# don't allow selections outside the list
 		if(self.selection<0):
 			self.selection=0
+		# adjust list shift
+		if(self.listShift > self.selection):
+			self.listShift=self.selection
 		self.redrawList()
 	def getSelectedContact(self):
 		"""returns the selected contact or None, if the list is empty or the selection is invalid"""
