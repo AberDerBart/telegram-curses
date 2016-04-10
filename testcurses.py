@@ -22,10 +22,13 @@ class ContactList:
 	def redrawList(self):
 		"""(re)draws the contact list"""
 		for i,contact in enumerate(self.contactList):
+			nameLength=self.win.getmaxyx()[1]-2
+			displayName=(contact['first_name']+' '+contact['last_name'])[:nameLength].ljust(nameLength)
+			
 			if(i==self.selection):
-				self.win.addstr(i+1,1,contact['first_name']+' '+contact['last_name'],curses.A_REVERSE)
+				self.win.addstr(i+1,1,displayName,curses.A_REVERSE)
 			else:
-				self.win.addstr(i+1,1,contact['first_name']+' '+contact['last_name'])
+				self.win.addstr(i+1,1,displayName)
 		self.win.refresh()
 	def nextContact(self):
 		"""selects the next contact in the list"""
