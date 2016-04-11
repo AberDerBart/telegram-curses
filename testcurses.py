@@ -12,7 +12,6 @@ class ContactList:
 		"""creates a new subwindow of mWin to display the contactlist"""
 		height=mWin.getmaxyx()[0]
 		self.win=mWin.subwin(height,30,0,0)
-		self.win.addstr(8,5,"Test")
 		self.win.border()
 		self.win.refresh()
 		self.selection=0
