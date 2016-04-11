@@ -82,12 +82,15 @@ class ChatWin:
 		"""redraws the chat"""
 		for msg in reversed(self.msgs):
 			sender=msg['from']
-			senderName=(sender['first_name']+' '+sender['last_name'])[:self.width()]
+			senderName=(sender['first_name']+' '+sender['last_name']+':')[:self.width()]
+			self.win.addstr(self.height()-self.linesPrint,1,'    '+msg['text'])
+			self.linesPrint+=1
 			if(self.ownNumber==sender['phone']):
 				self.win.addstr(self.height()-self.linesPrint,1,senderName,curses.color_pair(1))
 				self.linesPrint+=1
 			else:
-				self.win.addstr(self.height()-self.linesPrint,self.width()-len(senderName)+1,senderName,curses.color_pair(2))
+				self.win.addstr(self.height()-self.linesPrint,1,senderName,curses.color_pair(2))
+				#self.win.addstr(self.height()-self.linesPrint,self.width()-len(senderName)+1,senderName,curses.color_pair(2))
 				self.linesPrint+=1
 		self.win.refresh()
 	def loadChat(self,chatJson):
