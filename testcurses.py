@@ -13,8 +13,6 @@ class ContactList:
 		"""creates a new subwindow of mWin to display the contactlist"""
 		height=mWin.getmaxyx()[0]
 		self.win=mWin.subwin(height,30,0,0)
-		self.win.border()
-		self.win.refresh()
 		self.selection=0
 		self.listShift=0;
 	def loadList(self,listJson):
@@ -27,8 +25,13 @@ class ContactList:
 	def height(self):
 		"""return the height of the window (excluding border)"""
 		return self.win.getmaxyx()[0]-2
+	def resize(self,h,w):
+		"""resizes the contact list to height h and width w"""
+		self.win.resize(h,w)
+		self.redrawList()
 	def redrawList(self):
 		"""(re)draws the contact list"""
+		self.win.clear()
 		for i,contact in enumerate(self.contactList[self.listShift:self.listShift+self.height()]):
 			displayName=(contact['first_name']+' '+contact['last_name'])[:self.width()].ljust(self.width())
 			
@@ -36,6 +39,7 @@ class ContactList:
 				self.win.addstr(i+1,1,displayName,curses.A_REVERSE)
 			else:
 				self.win.addstr(i+1,1,displayName)
+		self.win.border()
 		self.win.refresh()
 	def nextContact(self):
 		"""selects the next contact in the list"""
@@ -68,18 +72,21 @@ class ChatWin:
 		height=mWin.getmaxyx()[0]
 		width=mWin.getmaxyx()[1]-30
 		self.win=mWin.subwin(height,width,0,30)
-		self.win.border()
-		self.win.refresh();
 		self.ownNumber="4915141646942"
-		self.linesPrint=0
 	def width(self):
 		"""return the width of the window (excluding border)"""
 		return self.win.getmaxyx()[1]-2
 	def height(self):
 		"""return the height of the window (excluding border)"""
 		return self.win.getmaxyx()[0]-2
+	def resize(self,h,w):
+		"""resizes the chat window to height h and width w"""
+		self.win.resize(h,w)
+		self.redraw()
 	def redraw(self):
 		"""redraws the chat"""
+		self.win.clear()
+		self.linesPrint=0
 		for msg in reversed(self.msgs):
 			sender=msg['from']
 			senderName=(sender['first_name']+' '+sender['last_name']+':')[:self.width()]
@@ -97,6 +104,7 @@ class ChatWin:
 				else:
 					self.win.addstr(self.height()-self.linesPrint,1,senderName,curses.color_pair(2))
 					self.linesPrint+=1
+		self.win.border()
 		self.win.refresh()
 	def loadChat(self,chatJson):
 		"""loads the chat [chatJson] into the chat window"""
@@ -104,6 +112,8 @@ class ChatWin:
 	def appendMessage(self,messageJson):
 		"""appends [message] to the end of the chat"""
 		self.msgs.append(json.loads(chatJson))
+
+
 mWin=curses.initscr()
 curses.noecho()
 curses.cbreak()
@@ -122,14 +132,23 @@ cw=ChatWin(mWin)
 cw.loadChat(chat)
 cw.redraw()
 
-inp=mWin.getch()
-
-while(inp == curses.KEY_UP or inp == curses.KEY_DOWN):
+while(True):
+	inp=mWin.getch()
 	if(inp==curses.KEY_UP):
 		cl.prevContact()
+		continue
 	if(inp==curses.KEY_DOWN):
 		cl.nextContact()
-	inp=mWin.getch()
+		continue
+	if(inp==curses.KEY_LEFT):
+		cl.resize(cl.height()+2,cl.width()+1)
+		continue
+	if(inp==curses.KEY_RESIZE):
+		cl.resize(mWin.getmaxyx()[0],cl.width()+2)
+		cw.resize(mWin.getmaxyx()[0],mWin.getmaxyx()[1]-cl.width()-2)
+		continue
+	else:
+		break
 
 curses.nocbreak()
 mWin.keypad(False)
