@@ -83,23 +83,25 @@ class ChatWin:
 		for msg in reversed(self.msgs):
 			sender=msg['from']
 			senderName=(sender['first_name']+' '+sender['last_name']+':')[:self.width()]
-			self.win.addstr(self.height()-self.linesPrint,1,'    '+msg['text'])
-			self.linesPrint+=1
-			if(self.ownNumber==sender['phone']):
-				self.win.addstr(self.height()-self.linesPrint,1,senderName,curses.color_pair(1))
+			if(self.linesPrint < self.height()):
+				# make sure we only print in available space
+				self.win.addstr(self.height()-self.linesPrint,1,'    '+msg['text'])
 				self.linesPrint+=1
-			else:
-				self.win.addstr(self.height()-self.linesPrint,1,senderName,curses.color_pair(2))
-				#self.win.addstr(self.height()-self.linesPrint,self.width()-len(senderName)+1,senderName,curses.color_pair(2))
-				self.linesPrint+=1
+			if(self.linesPrint < self.height()):
+				# make sure we only print in available space
+				if(self.ownNumber==sender['phone']):
+					self.win.addstr(self.height()-self.linesPrint,1,senderName,curses.color_pair(1))
+					self.linesPrint+=1
+				else:
+					self.win.addstr(self.height()-self.linesPrint,1,senderName,curses.color_pair(2))
+					self.linesPrint+=1
 		self.win.refresh()
 	def loadChat(self,chatJson):
 		"""loads the chat [chatJson] into the chat window"""
 		self.msgs=json.loads(chatJson)
 	def appendMessage(self,messageJson):
 		"""appends [message] to the end of the chat"""
-		return
-		
+		self.msgs.append(json.loads(chatJson))
 mWin=curses.initscr()
 curses.noecho()
 curses.cbreak()
