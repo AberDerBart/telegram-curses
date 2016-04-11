@@ -136,17 +136,13 @@ while(True):
 	inp=mWin.getch()
 	if(inp==curses.KEY_UP):
 		cl.prevContact()
-		continue
-	if(inp==curses.KEY_DOWN):
+	elif(inp==curses.KEY_DOWN):
 		cl.nextContact()
-		continue
-	if(inp==curses.KEY_LEFT):
+	elif(inp==curses.KEY_LEFT):
 		cl.resize(cl.height()+2,cl.width()+1)
-		continue
-	if(inp==curses.KEY_RESIZE):
+	elif(inp==curses.KEY_RESIZE):
 		cl.resize(mWin.getmaxyx()[0],cl.width()+2)
 		cw.resize(mWin.getmaxyx()[0],mWin.getmaxyx()[1]-cl.width()-2)
-		continue
 	else:
 		break
 
