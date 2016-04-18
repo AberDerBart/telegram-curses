@@ -137,7 +137,7 @@ curses.init_pair(2,curses.COLOR_GREEN,curses.COLOR_BLACK)
 
 
 
-leftRight=VSplit(mWin)
+leftRight=VSplit(mWin,10,10)
 
 cl=ContactList(leftRight.left)
 cl.loadList(liste)
