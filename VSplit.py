@@ -17,7 +17,6 @@ class VSplit:
 			self.xSplit=self.mWin.getmaxyx()[1]-self.mWidthRight-1
 		if(self.xSplit <= self.mWidthLeft):
 			self.xSplit=self.mWidthLeft
-		print(self.xSplit)
 		self.left.resize(1,1)
 		self.right.resize(1,1)
 		self.left.mvderwin(0,0)
