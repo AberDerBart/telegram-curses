@@ -3,9 +3,11 @@ import json
 import textwrap
 from telegramData import *
 from VSplit import *
+from HSplit import *
 from ContactList import *
 from ChatWindow import *
 from InputWindow import *
+from curses import ascii
 
 mWin=curses.initscr()
 curses.noecho()
@@ -18,13 +20,30 @@ curses.init_pair(2,curses.COLOR_GREEN,curses.COLOR_BLACK)
 
 leftRight=VSplit(mWin,10,10)
 
+topBottom=HSplit(leftRight.right,1,1)
+
 cl=ContactList(leftRight.left)
 cl.loadList(liste)
 cl.redraw()
 
-cw=ChatWindow(leftRight.right)
+cw=ChatWindow(topBottom.top)
 cw.loadChat(chat)
 cw.redraw()
+
+iw=InputWindow(topBottom.bottom)
+iw.redraw()
+
+def close(errorText=""):
+	curses.nocbreak()
+	mWin.keypad(False)
+	curses.echo()
+	curses.endwin()
+	if(errorText != ""):
+		print(errorText)
+	help(topBottom.bottom)
+	exit()
+
+rettext=str()
 
 while(True):
 	inp=mWin.getch()
@@ -36,14 +55,16 @@ while(True):
 		continue
 	elif(inp==curses.KEY_RESIZE):
 		if(not leftRight.refresh()):
-			break
+			close("error: window too small")
+		if(not topBottom.refresh()):
+			close("error: window to small")
 		cw.redraw()
+		iw.redraw()
 		cl.redraw()
 		continue
+	elif(ascii.isascii(inp)):
+		rettext=rettext+inp
 	else:
 		break
 
-curses.nocbreak()
-mWin.keypad(False)
-curses.echo()
-curses.endwin()
+close(rettext)
