@@ -44,23 +44,21 @@ def close(errorText=""):
 
 while(True):
 	inp=mWin.getch()
-
 	
 	if(inp==curses.KEY_UP):
 		cl.prevContact()
-		continue
 	elif(inp==curses.KEY_DOWN):
 		cl.nextContact()
-		continue
 	elif(inp==curses.KEY_RESIZE):
+		if(not leftRight.refresh()):
+			close("error: window too small")
+		if(not topBottom.refresh()):
+			close("error: window to small")
 		cw.redraw()
 		cl.redraw()
 		iw.redraw()
-		continue
 	elif(iw.processInput(inp)):
 		iw.redraw()
-		cw.redraw()
-		cl.redraw()
 	else:
 		break
 	if(not leftRight.refresh()):
