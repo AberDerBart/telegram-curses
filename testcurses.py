@@ -40,13 +40,12 @@ def close(errorText=""):
 	curses.endwin()
 	if(errorText != ""):
 		print(errorText)
-	help(topBottom.bottom)
 	exit()
-
-rettext=str()
 
 while(True):
 	inp=mWin.getch()
+
+	
 	if(inp==curses.KEY_UP):
 		cl.prevContact()
 		continue
@@ -54,17 +53,20 @@ while(True):
 		cl.nextContact()
 		continue
 	elif(inp==curses.KEY_RESIZE):
-		if(not leftRight.refresh()):
-			close("error: window too small")
-		if(not topBottom.refresh()):
-			close("error: window to small")
 		cw.redraw()
-		iw.redraw()
 		cl.redraw()
+		iw.redraw()
 		continue
-	elif(ascii.isascii(inp)):
-		rettext=rettext+inp
+	elif(iw.processInput(inp)):
+		iw.redraw()
+		cw.redraw()
+		cl.redraw()
 	else:
 		break
+	if(not leftRight.refresh()):
+		close("error: window too small")
+	if(not topBottom.refresh()):
+		close("error: window to small")
+	mWin.refresh()
 
-close(rettext)
+close()
