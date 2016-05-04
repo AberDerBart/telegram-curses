@@ -2,7 +2,7 @@ import curses
 
 class VSplit:
 	def __init__(self,mWin,mWidthLeft=1,mWidthRight=1):
-		self.xSplit=mWin.getmaxyx()[1]/2
+		self.xSplit=round(mWin.getmaxyx()[1]/2)
 		self.left=mWin.derwin(0,0)
 		self.right=mWin.derwin(0,0)
 		self.mWin=mWin

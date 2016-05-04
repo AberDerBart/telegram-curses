@@ -2,7 +2,7 @@ import curses
 
 class HSplit:
 	def __init__(self,mWin,mHeightTop=1,mHeightBottom=1):
-		self.ySplit=mWin.getmaxyx()[0]/2
+		self.ySplit=round(mWin.getmaxyx()[0]/2)
 		self.top=mWin.derwin(0,0)
 		self.bottom=mWin.derwin(0,0)
 		self.mWin=mWin
