@@ -42,6 +42,8 @@ def close(errorText=""):
 		print(errorText)
 	exit()
 
+inp=0;
+
 while(True):
 	inp=mWin.getch()
 	
@@ -67,4 +69,5 @@ while(True):
 		close("error: window to small")
 	mWin.refresh()
 
-close()
+
+close(str(inp))

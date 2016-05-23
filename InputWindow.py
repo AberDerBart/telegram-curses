@@ -9,7 +9,7 @@ class InputWindow:
 		if(ascii.isprint(key) or ascii.isspace(key)):
 			self.text=self.text + chr(key)
 			return True
-		if(key==curses.KEY_BACKSPACE):
+		if(key==ascii.DEL):
 			self.text=self.text[:-1]
 			return True
 		return False
@@ -17,4 +17,3 @@ class InputWindow:
 		"""redraws the window"""
 		self.win.clear()
 		self.win.addstr(0,0,self.text)
-
