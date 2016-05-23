@@ -13,7 +13,7 @@ class ContactList:
 		self.win=win
 	def loadList(self,listJson):
 		"""loads the contact list from listJson"""
-		self.contactList=filter(contactValid,json.loads(listJson))
+		self.contactList=list(filter(contactValid,json.loads(listJson)))
 	def width(self):
 		"""return the width of the window"""
 		return self.win.getmaxyx()[1]
