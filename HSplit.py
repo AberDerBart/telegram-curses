@@ -20,8 +20,8 @@ class HSplit:
 		self.top.resize(1,1)
 		self.bottom.resize(1,1)
 		self.top.mvderwin(0,0)
-		self.bottom.mvderwin(self.ySplit+1,0)
-		self.top.resize(self.ySplit,self.mWin.getmaxyx()[1])
-		self.bottom.resize(self.mWin.getmaxyx()[0]-self.ySplit-1,self.mWin.getmaxyx()[1])
-		self.mWin.hline(self.ySplit,0,curses.ACS_HLINE,self.mWin.getmaxyx()[1])
+		self.bottom.mvderwin(int(self.ySplit+1),0)
+		self.top.resize(int(self.ySplit),self.mWin.getmaxyx()[1])
+		self.bottom.resize(int(self.mWin.getmaxyx()[0]-self.ySplit-1),self.mWin.getmaxyx()[1])
+		self.mWin.hline(int(self.ySplit),0,curses.ACS_HLINE,self.mWin.getmaxyx()[1])
 		return True

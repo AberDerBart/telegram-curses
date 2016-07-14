@@ -20,8 +20,8 @@ class VSplit:
 		self.left.resize(1,1)
 		self.right.resize(1,1)
 		self.left.mvderwin(0,0)
-		self.right.mvderwin(0,self.xSplit+1)
-		self.left.resize(self.mWin.getmaxyx()[0],self.xSplit)
-		self.right.resize(self.mWin.getmaxyx()[0],self.mWin.getmaxyx()[1]-self.xSplit-1)
-		self.mWin.vline(0,self.xSplit,curses.ACS_VLINE,self.mWin.getmaxyx()[0])
+		self.right.mvderwin(0,int(self.xSplit+1))
+		self.left.resize(self.mWin.getmaxyx()[0],int(self.xSplit))
+		self.right.resize(self.mWin.getmaxyx()[0],int(self.mWin.getmaxyx()[1]-self.xSplit-1))
+		self.mWin.vline(0,int(self.xSplit),curses.ACS_VLINE,self.mWin.getmaxyx()[0])
 		return True
